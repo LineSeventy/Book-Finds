@@ -1,35 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  Box
+} from '@mui/material';
 
 function Catalogue() {
-  const [items, setItems] = useState([]);
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/catalogue')
-      .then(res => setItems(res.data))
+    fetch('http://localhost:5000/books')
+      .then(res => res.json())
+      .then(data => setBooks(data))
       .catch(err => console.error(err));
   }, []);
 
   return (
-    <Grid container spacing={2} padding={2}>
-      {items.map(item => (
-        <Grid item xs={12} sm={6} md={4} key={item.id}>
-          <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image={item.image}
-              alt={item.title}
-            />
-            <CardContent>
-              <Typography variant="h6">{item.title}</Typography>
-              <Typography color="text.secondary">${item.price}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+    <Container sx={{ paddingTop: 4 }}>
+      <Typography variant="h3" gutterBottom paddingBottom={"1rem"}>
+        Catalogue
+      </Typography>
+      <Grid container spacing={5}>
+        {books.slice(0, 25).map(book => (
+          <Grid
+            size={4}
+            key={book.id}
+          >
+            <Card
+
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '20rem',
+                width:"20rem",
+
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+
+                  objectFit: 'contain',
+                  height: 150
+                }}
+                image={book.image}
+                alt={book.title}
+              />
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" noWrap>{book.title}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  ${book.price}
+                </Typography>
+              </CardContent>
+              <Box sx={{ padding: 2 }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  href={book.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View
+                </Button>
+              </Box>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 }
 
