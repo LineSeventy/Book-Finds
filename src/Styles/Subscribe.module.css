@@ -1,0 +1,48 @@
+.subscribeSection {
+    background-color: #ffffff;
+    padding: 60px 0;
+
+  }
+  
+  .titleElement {
+    padding-bottom: 10px;
+  }
+  
+  .sectionTitle {
+    color: #660000;
+    font-weight: bold;
+  }
+  
+  .subscribeContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .description {
+
+    margin-bottom: 10px;
+  }
+  
+  .form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .input {
+    flex: 1;
+    background-color: #ffffff;
+  }
+  
+  .subscribeButton {
+    background-color: #d40000;
+    color: white;
+    text-transform: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .subscribeButton:hover {
+    background-color: #a00000;
+  }
+  

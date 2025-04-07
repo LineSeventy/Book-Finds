@@ -1,0 +1,32 @@
+.sortByControl {
+    transition: all 0.3s ease-in-out;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .label {
+    font-weight: bold;
+
+  }
+  
+  .select {
+    background-color: #ffffff;
+
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+  }
+  
+  .select:hover {
+    background-color: #ffebee; /* Lighter red on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
+  }
+  
+  .MuiMenuItem-root {
+    transition: background-color 0.3s ease;
+  }
+  
+  .MuiMenuItem-root:hover {
+    background-color: #ffcdd2;
+  }
+  

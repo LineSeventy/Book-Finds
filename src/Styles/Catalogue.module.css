@@ -1,0 +1,69 @@
+.container {
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+    min-height: 100vh;
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 20rem;
+    width: 20rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: none;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative; /* Important for positioning the overlay */
+  }
+  
+  .cardMedia {
+    object-fit: cover; /* Ensure the image fills the space */
+    height: 100%; /* Make sure the image takes up all the space */
+    width: 100%; /* Ensure it fills the width of the card */
+  }
+  
+  .cardContent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7); /* Dark background to make text readable */
+    color: white;
+    padding: 1rem;
+    transform: translateY(100%); /* Start from below the card */
+    transition: transform 0.3s ease; /* Smooth transition */
+  }
+  
+  .card:hover .cardContent {
+    transform: translateY(0); /* Bring it up on hover */
+  }
+  
+  .cardTitle {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .cardPrice {
+    font-size: 0.9rem;
+  }
+  
+  .buttonBox {
+    padding: 1rem;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    gap: 1rem;
+    position: relative; /* Ensure this area is in the correct stacking context */
+    z-index: 10; /* Ensure the pagination is on top */
+  }
+  
+  .pageButton {
+    margin-right: 5rem;
+    margin-left: 5rem;
+    position: relative;
+    z-index: 20; /* Ensure the button stays above any content */
+  }

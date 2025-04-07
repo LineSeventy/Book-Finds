@@ -1,23 +1,103 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box, Paper } from '@mui/material';
-
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+} from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
+import { Link} from "react-router"
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleLogin = (e) => {
+  // Handle email/password login
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
+    setError('');
+    setSuccess('');
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setSuccess('Logged in successfully!');
+      console.log('Email User:', userCredential.user);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Handle Google login
+  const handleGoogleLogin = async () => {
+    setError('');
+    setSuccess('');
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      setSuccess('Logged in with Google!');
+      console.log('Google User:', result.user);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Setup reCAPTCHA for phone
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha-container',
+        {
+          size: 'invisible',
+          callback: () => {},
+        },
+        auth
+      );
+    }
+  };
+
+  // Handle sending OTP
+  const handleSendOtp = async () => {
+    setError('');
+    setSuccess('');
+
+    try {
+      setupRecaptcha();
+      const confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+      window.confirmationResult = confirmationResult;
+      setIsOtpSent(true);
+      setSuccess('OTP sent to phone');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Handle verifying OTP
+  const handleVerifyOtp = async () => {
+    setError('');
+    setSuccess('');
+
+    try {
+      const result = await window.confirmationResult.confirm(otp);
+      setSuccess('Phone login successful!');
+      console.log('Phone User:', result.user);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{paddingBottom:"5rem"}}>
       <Paper elevation={3} sx={{ p: 4, mt: 8, borderRadius: 4 }}>
         <Typography variant="h4" align="center" gutterBottom>
           Login
         </Typography>
+
+        {/* Email/Password Login */}
         <Box component="form" onSubmit={handleLogin} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
             label="Email"
@@ -40,6 +120,57 @@ function LoginPage() {
             Log In
           </Button>
         </Box>
+
+        {/* Google Login */}
+        <Typography align="center" sx={{ my: 2 }}>
+          OR
+        </Typography>
+        <Button onClick={handleGoogleLogin} variant="outlined" color="secondary" fullWidth>
+          Sign in with Google
+        </Button>
+
+        {/* Phone/SMS Login */}
+        <Typography align="center" sx={{ my: 2 }}>
+          OR
+        </Typography>
+        <TextField
+          label="Phone Number"
+          variant="outlined"
+          fullWidth
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="+1234567890"
+        />
+        {!isOtpSent ? (
+          <Button onClick={handleSendOtp} variant="outlined" color="primary" fullWidth>
+            Send OTP
+          </Button>
+        ) : (
+          <>
+            <TextField
+              label="Enter OTP"
+              variant="outlined"
+              fullWidth
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+            />
+            <Button onClick={handleVerifyOtp} variant="contained" color="primary" fullWidth>
+              Verify OTP
+            </Button>
+          </>
+        )}
+                <Typography align="center" sx={{ mt: 2 }}>
+          Don't have an account?{' '}
+          <Link to="/SignUp" style={{ color: '#1976d2', textDecoration: 'none' }}>
+            Sign up here
+          </Link>
+        </Typography>
+        {/* Error and Success Messages */}
+        {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+        {success && <Typography color="primary" sx={{ mt: 2 }}>{success}</Typography>}
+
+        {/* Recaptcha Container */}
+        <div id="recaptcha-container"></div>
       </Paper>
     </Container>
   );

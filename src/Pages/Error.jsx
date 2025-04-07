@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, Paper, Button, Box } from '@mui/material';
-
+import {Link} from "react-router"
 function Error() {
   return (
     <Container maxWidth="sm">
@@ -15,9 +15,9 @@ function Error() {
           The page you're looking for doesn't exist or has been moved.
         </Typography>
         <Box mt={3}>
-          <Button variant="contained" color="primary" href="/">
-            Go Home
-          </Button>
+        <Button component={Link} to="/" variant="contained" color="primary">
+        Go Home
+      </Button>
         </Box>
       </Paper>
     </Container>
