@@ -40,7 +40,7 @@ function SubscriptionPayment() {
       const amount = prices[plan];
 
       // Call backend to create payment intent
-      const response = await axios.post('http://localhost:5000/api/create-payment', {
+      const response = await axios.post('{import.meta.env.VITE_API_URL}/api/create-payment', {
         amount,
       });
 

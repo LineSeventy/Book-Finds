@@ -14,7 +14,7 @@ function Catalogue() {
   const parsePrice = (price) => parseFloat(price.replace(/[^\d.-]/g, ''));
 
   const fetchBooks = (page = 1) => {
-    fetch(`http://localhost:5000/api/matched-books?page=${page}&limit=${booksPerPage}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/matched-books?page=${page}&limit=${booksPerPage}`)
       .then(res => res.json())
       .then(data => {
         const seenTitles = new Set();

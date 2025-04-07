@@ -26,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/matched-books');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/matched-books`);
         const contentType = res.headers.get('content-type');
 
         if (!res.ok) {

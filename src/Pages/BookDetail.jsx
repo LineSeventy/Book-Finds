@@ -21,7 +21,7 @@ function BookDetail() {
     setBook(null); 
     setLoading(true);  // Set loading to true when the fetch starts
     console.log('Fetching book details for bookId:', bookId);
-    fetch(`http://localhost:5000/api/matched-books?id=${bookId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/matched-books?id=${bookId}`)
       .then(res => res.json())
       .then(data => {
         console.log('Fetched data:', data);
