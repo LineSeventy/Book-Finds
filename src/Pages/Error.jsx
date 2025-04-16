@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Typography, Paper, Button, Box } from '@mui/material';
 import {Link} from "react-router"
 function Error() {
+  console.log(import.meta.env.VITE_API_URL); 
   return (
     <Container maxWidth="sm">
       <Paper elevation={3} sx={{ p: 4, mt: 10, borderRadius: 4, textAlign: 'center' }}>

@@ -23,35 +23,40 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [description, setDescription] = useState('');
   const { addToWishlist } = useAuth();
+
   useEffect(() => {
     const fetchBooks = async () => {
       try {
+        console.log(import.meta.env.VITE_API_URL); 
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/matched-books`);
         const contentType = res.headers.get('content-type');
-
+  
         if (!res.ok) {
           const errorText = await res.text();
+          console.log("Error Response Text:", errorText); // Log the response text
           throw new Error(`Server error: ${res.status} - ${errorText}`);
         }
-
+  
         if (!contentType || !contentType.includes('application/json')) {
           const text = await res.text();
+          console.log("Invalid Response Text:", text); // Log the invalid response
           throw new Error(`Invalid JSON response: ${text}`);
         }
-
+  
         const data = await res.json();
         const shuffled = [...data.books].sort(() => 0.5 - Math.random());
         setBooks(shuffled.slice(0, 10));
-        
+  
       } catch (err) {
         console.error('Failed to fetch books:', err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchBooks();
   }, []);
+  
 
   const [firstBook, ...remainingBooks] = books;
 
