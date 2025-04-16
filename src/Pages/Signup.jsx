@@ -1,4 +1,3 @@
-// Pages/CreateAccount.jsx
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box, Paper } from '@mui/material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';

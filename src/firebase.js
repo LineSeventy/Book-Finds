@@ -27,7 +27,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
+
 export { auth, googleProvider, RecaptchaVerifier,db  };
+
 export const addToWishlist = async (book) => {
   const user = auth.currentUser;
   if (!user) {
@@ -35,8 +37,10 @@ export const addToWishlist = async (book) => {
     return;
   }
   const userWishlistRef = doc(db, 'users', user.uid);
+
   const wishlistCollectionRef = collection(userWishlistRef, 'wishlist');
-  const bookRef = doc(wishlistCollectionRef, book.id || book.title); // use a unique ID
+  
+  const bookRef = doc(wishlistCollectionRef, book.id || book.title); 
 
   await setDoc(bookRef, {
     title: book.title,

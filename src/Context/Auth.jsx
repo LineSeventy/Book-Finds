@@ -12,7 +12,7 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-// Fetch from Firestore
+
 const fetchWishlist = async (uid) => {
   const wishlistRef = collection(doc(db, 'users', uid), 'wishlist');
   const snapshot = await getDocs(wishlistRef);
