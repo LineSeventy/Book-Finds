@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
         element: <Catalogue />
       },
       {
-        path: "catalogue/:bookId", // Use book.id as the parameter
+        path: "catalogue/:bookId", 
         element: <BookDetail />
       },
       {
