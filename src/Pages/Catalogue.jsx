@@ -11,7 +11,11 @@ function Catalogue() {
   const [totalPages, setTotalPages] = useState(1);
   const booksPerPage = 9;
 
-  const parsePrice = (price) => parseFloat(price.replace(/[^\d.-]/g, ''));
+  const parsePrice = (price) => {
+    if (!price) return null;
+    return parseFloat(price.replace(/[^\d.-]/g, ''));
+  };
+  
 
   const fetchBooks = (page = 1) => {
     fetch(`${import.meta.env.VITE_API_URL}/api/matched-books?page=${page}&limit=${booksPerPage}`)
@@ -56,12 +60,15 @@ function Catalogue() {
   };
 
   const getCheapestPrice = (book) => {
-    return Math.min(
+    const prices = [
       parsePrice(book.allbooked_price),
       parsePrice(book.nationalbookstore_price),
       parsePrice(book.fullybooked_price)
-    );
+    ].filter(p => p !== null);
+
+    return prices.length > 0 ? Math.min(...prices) : null;
   };
+  
 
   return (
     <Container className={styles.container}>
@@ -81,9 +88,15 @@ function Catalogue() {
               />
               <div className={styles.cardContent}>
                 <Typography className={styles.cardTitle} noWrap>{book.fullybooked_title}</Typography>
-                <Typography className={styles.cardPrice}>
-                  Price: ₱{getCheapestPrice(book).toFixed(2)}
-                </Typography>
+                {getCheapestPrice(book) !== null ? (
+                  <Typography className={styles.cardPrice}>
+                    Price: ₱{getCheapestPrice(book).toFixed(2)}
+                  </Typography>
+                ) : (
+                  <Typography className={styles.cardPrice}>
+                    Price: Not Available
+                  </Typography>
+                )}
                 <Box className={styles.buttonBox}>
                   <Link to={`/catalogue/${encodeURIComponent(book.id)}`}>
                     <Button variant="outlined" color="primary" fullWidth>
