@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Container, Typography, Grid, Card, CardMedia, Button, Box } from '@mui/material';
 import SortByOptions from '../Components/Sorting';
 import styles from '../Styles/Catalogue.module.css';
+import BookImage from '../Components/BookImageFallback';
 
 function Catalogue() {
   const [books, setBooks] = useState([]);
@@ -37,6 +38,8 @@ function Catalogue() {
       .catch(err => console.error('Fetch error:', err));
   };
 
+
+  
   useEffect(() => {
     fetchBooks(currentPage);
   }, [currentPage]);
@@ -80,12 +83,7 @@ function Catalogue() {
         {sortedBooks.map(book => (
           <Grid item xs={12} sm={4} key={book.id}>
             <Card className={styles.card}>
-              <CardMedia
-                component="img"
-                className={styles.cardMedia}
-                image={book.fullybooked_image}
-                alt={book.fullybooked_title}
-              />
+            <BookImage book={book} className={styles.cardMedia} />
               <div className={styles.cardContent}>
                 <Typography className={styles.cardTitle} noWrap>{book.fullybooked_title}</Typography>
                 {getCheapestPrice(book) !== null ? (
