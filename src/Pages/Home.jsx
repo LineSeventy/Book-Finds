@@ -139,8 +139,8 @@ const Home = () => {
                   {firstBook.author && `by ${firstBook.author}`}
                 </Typography>
                 <Typography sx={{ mt: 2 }}>
-                  {description || 'Loading description...'}
-                </Typography>
+                {description.length > 300 ? `${description.slice(0, 300)}...` : description || 'Loading description...'}
+              </Typography>
                 <Button variant="outlined" sx={{ mt: 2 }}>
                   Compare
                 </Button>
