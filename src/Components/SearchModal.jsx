@@ -12,7 +12,7 @@ const SearchModal = ({ open, onClose }) => {
   useEffect(() => {
     if (query.length > 1) {
       fetch(`${import.meta.env.VITE_API_URL}/api/search-books?q=${encodeURIComponent(query)}`)
-        .then(res => res.json())
+        .then(res => res.json()) 
         .then(data => setSuggestions(data))
         .catch(err => console.error('Search fetch error:', err));
     } else {
@@ -57,3 +57,4 @@ const SearchModal = ({ open, onClose }) => {
 };
 
 export default SearchModal;
+//Test
