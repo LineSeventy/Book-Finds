@@ -57,4 +57,3 @@ const SearchModal = ({ open, onClose }) => {
 };
 
 export default SearchModal;
-//Test
