@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Modal, Fade, Backdrop, Box, TextField, List, ListItemButton, ListItemText
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const SearchModal = ({ open, onClose }) => {
   const [query, setQuery] = useState('');
