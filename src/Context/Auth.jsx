@@ -27,8 +27,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
-      setLoading(false);
-
+  
       if (firebaseUser) {
         const fetched = await fetchWishlist(firebaseUser.uid);
         setWishlist(fetched);
@@ -36,10 +35,13 @@ export const AuthProvider = ({ children }) => {
         const local = localStorage.getItem('wishlist');
         setWishlist(local ? JSON.parse(local) : []);
       }
+  
+      setLoading(false); // Move this here
     });
-
+  
     return unsubscribe;
   }, []);
+  
 
   const saveToFirestore = async (uid, item) => {
     const itemRef = doc(collection(doc(db, 'users', uid), 'wishlist'));

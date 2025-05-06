@@ -22,7 +22,7 @@ const SearchModal = ({ open, onClose }) => {
 
   const handleSelect = (bookId) => {
     onClose();
-    navigate(`/catalogue/${encodeURIComponent(bookId)}`);
+    navigate(`/catalogue/${bookId}`);
   };
 
   return (

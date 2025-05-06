@@ -51,7 +51,9 @@ function BookDetail() {
   }
 
   const parsePrice = (price) => {
-    return parseFloat(price.replace(/[^\d.-]/g, '')); 
+    if (!price) return null;
+    const parsed = parseFloat(price.replace(/[^\d.-]/g, ''));
+    return isNaN(parsed) ? null : parsed;
   };
 
   return (
@@ -63,12 +65,13 @@ function BookDetail() {
               className={styles.featuredCardContent}
               sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
             >
-              <Typography variant="h6" className={styles.bookSource}>
-                {book.fullybooked_title}
-              </Typography>
-              <Typography variant="subtitle2" color="text.secondary">
-                {book.author && `by ${book.author}`}
-              </Typography>
+            <Typography variant="h6" className={styles.bookSource}>
+              {book.fullybooked_title || 'Title not available'}
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              {book.author ? `by ${book.author}` : 'Author unknown'}
+            </Typography>
+
               <Typography sx={{ mt: 2 }}>
                 {description}
               </Typography>
@@ -79,15 +82,16 @@ function BookDetail() {
             >
               <ImageWithFallback
                 images={[
-                  book.fullybooked_image,
-                  book.allbook_image,
-                  book.nationalbookstore_image,
+                  book.fullybooked_image || '',
+                  book.allbook_image || '',
+                  book.nationalbookstore_image || '',
                 ]}
-                alt={book.fullybooked_title}
+                alt={book.fullybooked_title || 'Book image'}
                 height={400}
                 width="100%"
                 style={{ objectFit: 'contain', maxWidth: '100%' }}
               />
+
               <Box className={styles.overlay}>
                 <Button className={styles.wishlistBtn}>
                   Add to Wishlist
@@ -101,37 +105,38 @@ function BookDetail() {
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>Price Comparison</Typography>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="body1">AllBooked</Typography>
-            <Typography variant="body2" color="text.secondary">
-              ₱{parsePrice(book.allbooked_price).toFixed(2)}
-            </Typography>
-            <Button variant="outlined" href={book.allbooked_url} target="_blank" rel="noreferrer" sx={{ mt: 1 }}>
-              View Price
-            </Button>
-          </Box>
-
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="body1">National Bookstore</Typography>
-            <Typography variant="body2" color="text.secondary">
-              ₱{parsePrice(book.nationalbookstore_price).toFixed(2)}
-            </Typography>
-            <Button variant="outlined" href={book.nationalbookstore_url} target="_blank" rel="noreferrer" sx={{ mt: 1 }}>
-              View Price
-            </Button>
-          </Box>
-
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="body1">FullyBooked</Typography>
-            <Typography variant="body2" color="text.secondary">
-              ₱{parsePrice(book.fullybooked_price).toFixed(2)}
-            </Typography>
-            <Button variant="outlined" href={book.fullybook_url} target="_blank" rel="noreferrer" sx={{ mt: 1 }}>
-              View Price
-            </Button>
-          </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 2 }}>
+          {[{
+            name: 'AllBooked',
+            price: parsePrice(book.allbooked_price),
+            url: book.allbooked_url
+          }, {
+            name: 'National Bookstore',
+            price: parsePrice(book.nationalbookstore_price),
+            url: book.nationalbookstore_url
+          }, {
+            name: 'FullyBooked',
+            price: parsePrice(book.fullybooked_price),
+            url: book.fullybook_url
+          }].map((source, idx) => (
+            <Box key={idx} sx={{ flex: '1 1 30%', textAlign: 'center' }}>
+              <Typography variant="body1">{source.name}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {source.price !== null ? `₱${source.price.toFixed(2)}` : 'Price not available'}
+              </Typography>
+              {source.url ? (
+                <Button variant="outlined" href={source.url} target="_blank" rel="noreferrer" sx={{ mt: 1 }}>
+                  View Price
+                </Button>
+              ) : (
+                <Button variant="outlined" disabled sx={{ mt: 1 }}>
+                  Not Available
+                </Button>
+              )}
+            </Box>
+          ))}
         </Box>
+
       </Box>
     </Container>
   );

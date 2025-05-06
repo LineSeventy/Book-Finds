@@ -16,13 +16,13 @@ import styles from '../Styles/Home.module.css';
 import Subscribe from '../Components/Subscribe'; 
 import QuoteSection from '../Components/Quote';
 import { useAuth } from '../Context/Auth';
-
+import {Link} from "react-router"
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [description, setDescription] = useState('');
-  const { addToWishlist } = useAuth();
+  const { handleAddToWishlist } = useAuth();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -141,9 +141,11 @@ const Home = () => {
                 <Typography sx={{ mt: 2 }}>
                 {description.length > 300 ? `${description.slice(0, 300)}...` : description || 'Loading description...'}
               </Typography>
-                <Button variant="outlined" sx={{ mt: 2 }}>
-                  Compare
-                </Button>
+              <Link to={`/catalogue/${encodeURIComponent(firstBook.id)}`}>
+              <Button variant="outlined" sx={{ mt: 2 }}>
+                Compare
+              </Button>
+            </Link>
               </CardContent>
 
               <Box
@@ -220,7 +222,7 @@ const Home = () => {
                       className={styles.wishlistBtn}
                       variant="contained"
                       size="small"
-                      onClick={() => addToWishlist(book)}
+                      onClick={() => handleAddToWishlist(book)}
                     >
                       Add to Wishlist
                     </Button>

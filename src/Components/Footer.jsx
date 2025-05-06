@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../Styles/Footer.module.css';
 import { Container, Grid, Typography, Link, Box, useTheme } from '@mui/material';
 import logo from "../Assets/Logo.png"
+
 const Footer = () => {
   const theme = useTheme();
 
@@ -12,11 +13,10 @@ const Footer = () => {
           <Grid item xs={12} md={4}>
             <div className={styles.brand}>
               <img src={logo} alt="logo" className={styles.logo} />
-
             </div>
-            <Typography variant="body2" color="textSecondary" >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus libero lectus nonet psryroin.
-              </Typography>s
+            <Typography variant="body2" color="textSecondary">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus libero lectus nonet psryroin.
+            </Typography>
           </Grid>
 
           {[
@@ -57,7 +57,7 @@ const Footer = () => {
         <Container>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
-              <Typography variant="body2">© 2025 BookFinds. All rights reserved.</Typography>
+              <Typography variant="body2">© 2025 Cavanssly. All rights reserved.</Typography>
             </Grid>
             <Grid item xs={12} md={6} className={styles.alignRight}>
               <Box className={styles.socialLinks}>
