@@ -6,20 +6,22 @@
   
   .brand {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: relative;
+    align-items: center;
   }
   
   .logo {
-    position: absolute;
-    width: 120px;
-    top: 0;
-    margin-bottom: 10px;
-    height: 8rem;
+    display: flex;
+    align-items: center;
+    height: 6rem;
     width: auto;
   }
-  
+
+  .logoImage {
+    height: 8rem;
+    width: auto;
+    animation: fadeIn 0.8s ease;
+  }
+
   .sectionTitle {
 
     font-weight: bold;
@@ -45,11 +47,13 @@
     color: #d40000;
   }
   
-  .footerBottom {
-    background-color: #ffffff;
-    padding: 20px 0;
-    margin-top: 40px;
-  }
+
+.footerBottom {
+  background-color: #ffffff;
+  padding: 20px 0;
+  margin-top: 40px;
+  text-align: center;
+}
   
   .alignRight {
     text-align: right;
@@ -59,5 +63,38 @@
     color: #a00000;
     font-size: 1.2rem;
     margin-left: 10px;
+  }
+  
+  .navLink {
+    text-decoration: none;
+    color: #000;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .navLink:hover {
+    color: var(--primary-red);
+    font-weight: bold;
+  }
+  .footerNavLinks {
+    
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .footerNavLinks a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1rem; 
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .footerNavLinks a:hover {
+    color: var(--primary-red);
+    font-weight: bold;
   }
   

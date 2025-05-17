@@ -12,15 +12,13 @@ const Subscribe = () => {
               <Grid item xs={12} md={6}>
                 <div className={styles.titleElement}>
                   <Typography variant="h5" className={styles.sectionTitle}>
-                    Subscribe to our newsletter
+                  Subscribe Now to Get Regular Updates
                   </Typography>
                 </div>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box className={styles.subscribeContent}>
-                  <Typography variant="body2" className={styles.description}>
-                    Sed eu feugiat amet, libero ipsum enim pharetra hac dolor sit amet, consectetur. Elit adipiscing enim pharetra hac.
-                  </Typography>
+
                   <form className={styles.form}>
                     <TextField
                       fullWidth

@@ -165,7 +165,7 @@ const Home = () => {
                     firstBook.nationalbookstore_image,
                   ]}
                   alt={firstBook.title}
-                  height={400}
+                  height="70%"
                   width="100%"
                   style={{ objectFit: 'contain', maxWidth: '100%' }}
                 />
