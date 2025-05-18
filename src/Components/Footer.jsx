@@ -1,3 +1,4 @@
+
 import React from 'react';
 import styles from '../Styles/Footer.module.css';
 import { Container, Typography, Link, Box, useTheme } from '@mui/material';
@@ -8,11 +9,12 @@ const Footer = () => {
 
   return (
     <footer className={styles.footer}>
-      <Container>
+      <Container maxWidth={false} sx={{ width: '100%' }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" py={3} className={styles.footerTop}>
           <Box className={styles.logo}>
             <img src={logo} alt="logo" className={styles.logoImage} />
           </Box>
+
           <Box display="flex" justifyContent="center" alignItems="center" gap={4} className={styles.footerNavLinks} flexWrap="wrap">
             <Link href="/" className={styles.navLink} underline="hover">Home</Link>
             <Link href="/about" className={styles.navLink} underline="hover">About Us</Link>
@@ -23,7 +25,7 @@ const Footer = () => {
       </Container>
 
       <Box className={styles.footerBottom}>
-        <Container>
+        <Container maxWidth={false} sx={{ width: '100%' }}>
           <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" textAlign="center">
             <Typography variant="body2">© 2025 Cavanssly. All rights reserved.</Typography>
             <Box className={styles.socialLinks} mt={1}>

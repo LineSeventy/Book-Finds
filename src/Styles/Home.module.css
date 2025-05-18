@@ -25,10 +25,18 @@
     font-size: 1.1rem;
   }
   
-  .bookSource {
-    margin-top: 16px;
-    font-weight: 600;
-  }
+.bookSource {
+  font-family: 'EB Garamond', serif;
+  font-weight: 400;
+  color: var(--ast-global-color-3);
+  font-size: 2em;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  clear: both;
+  margin-bottom: 20px;
+}
+
   
   .featuredCard {
     max-width: 100%;

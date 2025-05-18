@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { CardMedia } from '@mui/material';
-
+import lastFallback from "../Assets/NoImg.svg?url"; 
 const ImageWithFallback = ({ images = [], alt, height = 200, width = '100%', style }) => {
   const [index, setIndex] = useState(0);
-
-  const handleError = () => {
-    if (index < images.length - 1) {
+ const fullList = [...images.filter(Boolean), lastFallback];
+const handleError = () => {
+    if (index < fullList.length - 1) {
       setIndex((prev) => prev + 1);
     }
   };
 
-  if (!images.length) return null;
-
-  return (
+if (!fullList.length) return null;
+console.log('Current image src:', fullList[index]);
+console.log('Fallback image URL:', lastFallback);
+return (
     <CardMedia
       component="img"
       height={height}
       width={width}
-      image={images[index]}
+      image={fullList[index]}
       alt={alt}
       onError={handleError}
       sx={{ objectFit: 'contain', ...style }}

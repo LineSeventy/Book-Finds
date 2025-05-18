@@ -6,7 +6,8 @@ import {
   Box,
   Card,
   CardContent,
-  Button
+  Button,
+  ImageList
 } from '@mui/material';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -17,7 +18,10 @@ import Subscribe from '../Components/Subscribe';
 import QuoteSection from '../Components/Quote';
 import { useAuth } from '../Context/Auth';
 import {Link} from "react-router"
-
+import lastFallback from "../Assets/NoImg.svg?url"; 
+import nbs from "../Assets/NBSLogo.png"
+import bkl from "../Assets/bfl_header_360x.avif"
+import bfb from "../Assets/fullybooked-logo.png"
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -124,7 +128,7 @@ const Home = () => {
     );
   }
   return (
-    <Container sx={{ mt: 6, marginBottom: "10rem" }}>
+    <Container sx={{ mt: 1, marginBottom: "10rem" }}>
       {firstBook && (
         <Box sx={{ mb: 4 }}>
           <Card className={styles.featuredCard} sx={{}}>
@@ -133,7 +137,7 @@ const Home = () => {
                 className={styles.featuredCardContent}
                 sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
               >
-                <Typography variant="h6" className={styles.bookSource}>
+                <Typography variant="h3" className={styles.bookSource}>
                   {firstBook.fullybooked_title}
                 </Typography>
                 <Typography variant="subtitle2" color="text.secondary">
@@ -163,6 +167,7 @@ const Home = () => {
                     firstBook.fullybooked_image,
                     firstBook.allbook_image,
                     firstBook.nationalbookstore_image,
+                      lastFallback
                   ]}
                   alt={firstBook.title}
                   height="70%"
@@ -174,7 +179,24 @@ const Home = () => {
           </Card>
         </Box>
       )}
-
+      <Box sx={{ textAlign: 'center', mb: 20 }}>
+        <Typography variant="h3" sx={{ mb: 5 }}>
+          Sources
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 10,
+            flexWrap: 'wrap',
+          }}
+        >
+          <img src={nbs} alt="National Book Store" style={{ maxWidth: 350 }} />
+          <img src={bfb} alt="Fully Booked" style={{ maxWidth: 350 }} />
+          <img src={bkl} alt="Books for Less" style={{ maxWidth: 350 }} />
+        </Box>
+      </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
           variant="h4"
@@ -212,12 +234,14 @@ const Home = () => {
                       book.fullybooked_image,
                       book.allbook_image,
                       book.nationalbookstore_image,
+
                     ]}
                     alt={book.title}
                     height={300}
                     width="100%"
                     style={{ objectFit: 'contain', maxWidth: '100%' }}
                   />
+
                   <Box className={styles.overlay}>
                     <Button
                       className={styles.wishlistBtn}

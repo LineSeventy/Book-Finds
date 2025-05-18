@@ -31,43 +31,45 @@ const Header = () => {
 
   return (
     <AppBar position="static" className={styles.appBar} sx={{ backgroundColor: '#ffffff', color: '#333' }}>
-      <Container maxWidth="xl">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box component={NavLink} to="/" className={styles.logo}>
-            <img src={logo} alt="BOOKFINDS" className={styles.logoImage} />
-          </Box>
+<Container maxWidth={false} sx={{ width: '100%' }}>
+       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+  <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box component={NavLink} to="/" className={styles.logo}>
+      <img src={logo} alt="BOOKFINDS" className={styles.logoImage} />
+    </Box>
+  </Box>
 
-          <Box display="flex" alignItems="center" gap={4}>
-            <Typography component={NavLink} to="/" className={styles.navLink}>Home</Typography>
-            <Typography component={NavLink} to="/about" className={styles.navLink}>About Us</Typography>
-            <Typography component={NavLink} to="/catalogue" className={styles.navLink}>Books</Typography>
-            <Typography component={NavLink} to="/subscription" className={styles.navLink}>Subscription</Typography>
+<Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+    <Typography component={NavLink} to="/" className={styles.navLink}>Home</Typography>
+    <Typography component={NavLink} to="/about" className={styles.navLink}>About Us</Typography>
+    <Typography component={NavLink} to="/catalogue" className={styles.navLink}>Books</Typography>
+    <Typography component={NavLink} to="/subscription" className={styles.navLink}>Subscription</Typography>
 
-            <IconButton className={styles.hoverIconButton}>
-              <AccountCircle />
-              <Typography
-                variant="body2"
-                ml={1}
-                component={NavLink}
-                to={user ? "/account" : "/create"}
-              >
-                {user ? "My Account" : "Sign In"}
-              </Typography>
-            </IconButton>
+    <IconButton className={styles.hoverIconButton}>
+      <AccountCircle />
+      <Typography
+        variant="body2"
+        ml={1}
+        component={NavLink}
+        to={user ? "/account" : "/create"}
+      >
+        {user ? "My Account" : "Sign In"}
+      </Typography>
+    </IconButton>
 
-            <IconButton className={styles.hoverIconButton} onClick={handleOpenWishlist}>
-              <ShoppingCart />
-              <Typography variant="body2" ml={1}>Wishlist ({wishlist.length})</Typography>
-            </IconButton>
+    <IconButton className={styles.hoverIconButton} onClick={handleOpenWishlist}>
+      <ShoppingCart />
+      <Typography variant="body2" ml={1}>Wishlist ({wishlist.length})</Typography>
+    </IconButton>
 
-            <IconButton className={styles.hoverIconButton} onClick={handleOpenSearch}>
-              <Search />
-            </IconButton>
+    <IconButton className={styles.hoverIconButton} onClick={handleOpenSearch}>
+      <Search />
+    </IconButton>
 
-            <SearchModal open={searchOpen} onClose={handleCloseSearch} />
-            <WishlistModal open={wishlistOpen} onClose={handleCloseWishlist} items={wishlist} />
-          </Box>
-        </Toolbar>
+    <SearchModal open={searchOpen} onClose={handleCloseSearch} />
+    <WishlistModal open={wishlistOpen} onClose={handleCloseWishlist} items={wishlist} />
+  </Box>
+</Toolbar>
       </Container>
     </AppBar>
   );

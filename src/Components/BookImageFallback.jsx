@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CardMedia } from '@mui/material';
-
+import lastFallback from "../Assets/NoImg.svg?url"; 
 const fallback = '/fallback-book.png';
 
 const BookImage = ({ book, className }) => {
@@ -8,6 +8,7 @@ const BookImage = ({ book, className }) => {
     book.fullybooked_image,
     book.nationalbookstore_image,
     book.allbooked_image,
+    lastFallback
   ].filter(Boolean);
 
   const [imgIndex, setImgIndex] = useState(0);
@@ -16,14 +17,14 @@ const BookImage = ({ book, className }) => {
     if (imgIndex < sources.length - 1) {
       setImgIndex(prev => prev + 1);
     } else {
-      setImgIndex(-1); // triggers fallback
+      setImgIndex(-1); 
     }
   };
 
   const image = imgIndex === -1 ? fallback : sources[imgIndex];
 
   return (
-    <CardMedia
+ <CardMedia
       component="img"
       className={className}
       image={image}
