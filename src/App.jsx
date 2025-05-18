@@ -12,6 +12,7 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from './Context/Auth';
+import { Container } from "@mui/material"
 
 const theme = createTheme({
   typography: {
@@ -20,19 +21,20 @@ const theme = createTheme({
 });
 
 function App() {
-
   return (
-    <>
     <AuthProvider>
-    <ThemeProvider theme={theme}>
-  <Header   />
-  <Outlet/>
-
-  <Footer/>
-  </ThemeProvider>
-  </AuthProvider>
-    </>
-  )
+      <ThemeProvider theme={theme}>
+        <div className="app-container">
+          <Header />
+          <div className="main-content">
+            <Outlet />
+          </div>
+          <Footer />
+        </div>
+      </ThemeProvider>
+    </AuthProvider>
+  );
 }
+
 
 export default App
