@@ -11,8 +11,7 @@ const handleError = () => {
   };
 
 if (!fullList.length) return null;
-console.log('Current image src:', fullList[index]);
-console.log('Fallback image URL:', lastFallback);
+
 return (
     <CardMedia
       component="img"

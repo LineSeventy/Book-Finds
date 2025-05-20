@@ -17,8 +17,9 @@
   }
 
   .logoImage {
-    height: 8rem;
-    width: auto;
+  height: auto;
+  width: clamp(120px, 13vw, 200px);
+  object-fit: contain;
     animation: fadeIn 0.8s ease;
   }
 

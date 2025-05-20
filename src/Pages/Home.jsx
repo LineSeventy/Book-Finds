@@ -22,6 +22,9 @@ import lastFallback from "../Assets/NoImg.svg?url";
 import nbs from "../Assets/NBSLogo.png"
 import bkl from "../Assets/bfl_header_360x.avif"
 import bfb from "../Assets/fullybooked-logo.png"
+import ReviewPart from '../Components/ReviewPart';
+
+
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -127,23 +130,42 @@ const Home = () => {
       </Container>
     );
   }
+
+  const getFallbackTitle = (book) => {
   return (
-    <Container sx={{ mt: 1, marginBottom: "10rem" }}>
+    book.nationalbookstore_title ||
+    book.fullybooked_title ||
+    book.allbook_title ||
+    'Untitled Book'
+  );
+};
+
+  return (
+<Container
+  disableGutters
+  maxWidth={false}
+  sx={{
+
+    marginBottom: "10rem"
+  }}
+>
+
       {firstBook && (
-        <Box sx={{ mb: 4 }}>
-          <Card className={styles.featuredCard} sx={{}}>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, boxShadow: "none" }}>
+        <Box sx={{ mb: 10, }} >
+          
+          <Card className={styles.featuredCard} >
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, boxShadow: "none", minHeight:"50rem"}}>
               <CardContent
                 className={styles.featuredCardContent}
                 sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
               >
-                <Typography variant="h3" className={styles.bookSource}>
-                  {firstBook.fullybooked_title}
+                <Typography variant="h2" className={styles.bookSource}>
+              {getFallbackTitle(firstBook)}
                 </Typography>
                 <Typography variant="subtitle2" color="text.secondary">
                   {firstBook.author && `by ${firstBook.author}`}
                 </Typography>
-                <Typography sx={{ mt: 2 }}>
+                <Typography sx={{ mt: 1 }}>
                 {description.length > 300 ? `${description.slice(0, 300)}...` : description || 'Loading description...'}
               </Typography>
               <Link to={`/catalogue/${encodeURIComponent(firstBook.id)}`}>
@@ -162,6 +184,7 @@ const Home = () => {
                   alignItems: 'center',
                 }}
               >
+                <Box sx={{ width: '100%', maxWidth: 400, height: 'auto' }}>
                 <ImageWithFallback
                   images={[
                     firstBook.fullybooked_image,
@@ -170,15 +193,19 @@ const Home = () => {
                       lastFallback
                   ]}
                   alt={firstBook.title}
-                  height="70%"
-                  width="100%"
-                  style={{ objectFit: 'contain', maxWidth: '100%' }}
+                  style={{
+      width: '100%',
+      height: 'auto',
+      objectFit: 'contain',
+    }}
                 />
+                </Box>
               </Box>
             </Box>
           </Card>
         </Box>
       )}
+
       <Box sx={{ textAlign: 'center', mb: 20 }}>
         <Typography variant="h3" sx={{ mb: 5 }}>
           Sources
@@ -192,39 +219,55 @@ const Home = () => {
             flexWrap: 'wrap',
           }}
         >
-          <img src={nbs} alt="National Book Store" style={{ maxWidth: 350 }} />
-          <img src={bfb} alt="Fully Booked" style={{ maxWidth: 350 }} />
-          <img src={bkl} alt="Books for Less" style={{ maxWidth: 350 }} />
+          <img src={nbs} alt="National Book Store"  className={styles.logoImage} />
+          <img src={bfb} alt="Fully Booked" className={styles.logoImage}/>
+          <img src={bkl} alt="Books for Less"  className={styles.logoImage}/>
         </Box>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography
-          variant="h4"
-          className={styles.bookSource}
-          sx={{ textAlign: "center", marginBottom: "2rem" }}
-        >
-          Books Catalogue
-        </Typography>
-
+ <Typography
+  variant="h4"
+  className={styles.bookSource}
+  sx={{
+    textAlign: "center",
+    marginBottom: "2rem",
+    fontSize: {
+      xs: '1.5rem',
+      sm: '2rem',
+      md: '2.5rem',
+    },
+  }}
+>
+  Books Catalogue
+</Typography>
         <Slider {...sliderSettings}>
           {remainingBooks.map((book) => (
             <Container key={crypto.randomUUID()} sx={{ px: 2 }}>
               <Card
                 className={styles.card}
-                sx={{
-                  height: 460,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  boxShadow: 'none',
-                  border: 'none',
-                  borderRadius: 3,
-                  px: 1,
-                }}
+  sx={{
+    height: 460,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    px: 1,
+    border: '2px solid #ccc',
+    borderRadius: 3,
+    backgroundColor: '#fff',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    marginBottom:"5rem",
+    marginTop:"5rem",
+    '&:hover': {
+      transform: 'translateY(-6px)',
+      boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+      borderColor: '#999',
+    },
+  }}
               >
                 <CardContent className={styles.cardContent}>
                   <Typography variant="h6" className={styles.title}>
-                    {book.nationalbookstore_title}
+                    {getFallbackTitle(book)}
                   </Typography>
                 </CardContent>
 
@@ -258,9 +301,10 @@ const Home = () => {
           ))}
         </Slider>
 
-        <QuoteSection />
-        <Subscribe />
+        <ReviewPart />
+<Subscribe book={firstBook} />
       </Box>
+
     </Container>
   );
 };

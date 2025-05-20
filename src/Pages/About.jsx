@@ -24,7 +24,7 @@ function About() {
   return (
     <Container maxWidth="md" className={styles.container}>
       <Paper elevation={3} className={styles.paper}>
-        {/* About Us Section */}
+
         <Typography variant="h4" gutterBottom align="center" className={styles.title}>
           About Us
         </Typography>
@@ -65,7 +65,7 @@ function About() {
           </Typography>
         </Box>
 
-        {/* Contact Us Section */}
+   
         <Box className={styles.contactSection}>
           <Typography variant="h5" gutterBottom className={styles.contactTitle}>
             Contact Us

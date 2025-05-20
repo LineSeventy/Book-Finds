@@ -3,11 +3,8 @@
   --light-red-bg: #fbeaea;
 }
 
-.appBar {
-  background-color: #fff;
-  color: #333;
-  animation: fadeInTop 0.6s ease;
-}
+
+
 
 .toolbarSpaceBetween {
   display: flex;
@@ -111,10 +108,9 @@
 
 .logoImage {
   position: absolute;
-  top: 1;
-  left: 0;
-  height: 8rem;
-  width: auto;
+  height: auto;
+  width: clamp(120px, 13vw, 200px);
+  object-fit: contain;
 }
 
 /* Animations */

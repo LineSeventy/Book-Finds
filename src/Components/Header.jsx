@@ -30,8 +30,8 @@ const Header = () => {
   const { user, wishlist } = useAuth();
 
   return (
-    <AppBar position="static" className={styles.appBar} sx={{ backgroundColor: '#ffffff', color: '#333' }}>
-<Container maxWidth={false} sx={{ width: '100%' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#ffffff', color: '#333', zIndex:'1'}}>
+<Container maxWidth={false} disableGutters sx={{ width: '100%' }}>
        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
   <Box sx={{ display: "flex", alignItems: "center" }}>
     <Box component={NavLink} to="/" className={styles.logo}>
