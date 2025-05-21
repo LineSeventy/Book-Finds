@@ -18,7 +18,7 @@
 
   .logoImage {
   height: auto;
-  width: clamp(120px, 13vw, 200px);
+  width: clamp(200px, 13vw, 200px);
   object-fit: contain;
     animation: fadeIn 0.8s ease;
   }
@@ -99,3 +99,19 @@
     font-weight: bold;
   }
   
+  @media (max-width: 768px) {
+  .footerTop {
+    flex-direction: column !important;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .footerNavLinks {
+    flex-direction: column !important;
+    align-items: center;
+  }
+
+  .navLink {
+    font-size: 1rem;
+  }
+}

@@ -16,7 +16,7 @@ const Subscribe = ({ book }) => {
         py: 6,
       }}
     >
-      {/* LEFT SIDE: Title + Form */}
+
       <Box sx={{ flex: 1 }}>
         <Typography variant="h5" className={styles.sectionTitle} sx={{ mb: 2 }}>
           Subscribe Now to Get Regular Updates

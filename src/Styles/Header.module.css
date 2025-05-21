@@ -146,3 +146,18 @@
     transform: translateY(0);
   }
 }
+
+.MuiDrawer-paper {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-red) #f0f0f0;
+}
+
+.MuiDrawer-paper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.MuiDrawer-paper::-webkit-scrollbar-thumb {
+  background-color: var(--primary-red);
+  border-radius: 4px;
+}
+
