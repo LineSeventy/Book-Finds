@@ -1,130 +1,184 @@
-/* .card {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 16px;
-  border: 2px solid #ccc; 
+.featuredCard {
+  background-color: #FFBFBF !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-} */
-.logoImage {
-  max-width: 100%;
-  height: auto;
-  width: clamp(120px, 25vw, 350px);
-  object-fit: contain;
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 4rem;
 }
 
-/* .card:hover {
+.featuredCard:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.featuredCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.bookSource {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.card {
+  position: relative;
+  z-index: 0;
+  margin-bottom: 5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 460px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  border-color: #999; } */
-  
-  .cardContent {
-    text-align: center;
-    animation: fadeIn 0.6s ease-in-out;
-  }
-  
+  border-color: #999;
+}
+
+.cardContent {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
 
 .title {
-  font-family: 'Ancizar Serif', serif;
-  color: black;
-  font-weight: 600;
   font-size: 1.1rem;
-}
-  
-.bookSource {
-  font-family: 'Ancizar Serif', serif;
-  font-weight: 400;
-  color: var(--ast-global-color-3);
-  font-size: 2em;
-  line-height: 1.2;
-  margin: 0;
-  padding: 0;
-  clear: both;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1.5rem;
+  height: auto;
+  transition: color 0.3s ease;
 }
 
-  
-  .featuredCard {
-    max-width: 100%;
-    margin: 0;
-    padding-left: 5%;
-    border: none;
-     background: #FFBFBF !important;
-    box-shadow: none !important;
-    z-index: 0;
+.card:hover .cardContent .title {
+  color: #d32f2f;
+}
 
-  }
-  
-  .featuredCardContent {
-    
-    text-align: left;
-    animation: fadeIn 0.6s ease-in-out;
-
-  }
-  
 .imageWrapper {
   position: relative;
   width: 100%;
   height: 300px;
-  max-height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
+.imageWrapper img {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .imageWrapper img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  border-radius: 12px;
+  z-index: 5;
+}
+
+/* Hover effect for desktop */
+.imageWrapper:hover .overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Always visible overlay on touch devices */
+@media (hover: none) and (pointer: coarse) {
   .overlay {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent 60%);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    padding-bottom: 1rem;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
-  
-  .imageWrapper:hover .overlay {
-    opacity: 1;
-  }
-  
+
   .wishlistBtn {
-    background-color: #ff1744 !important;
-    color: white !important;
-    animation: slideUpFade 0.4s ease forwards;
     opacity: 0;
-    width: 100%;
-    height: 3rem;
-    border-radius: 0 0 8px 8px;
+    animation: fadeInBtn 0.6s ease-in forwards;
+    animation-delay: 0.4s;
   }
-  
-  .imageWrapper:hover .wishlistBtn {
-    animation: slideUpFade 0.4s ease forwards;
+}
+
+.wishlistBtn {
+  background-color: #d32f2f;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 24px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.wishlistBtn:hover {
+  background-color: #b71c1c;
+  transform: scale(1.05);
+}
+
+.logoImage {
+  height: 70px;
+  width: auto;
+  filter: grayscale(10%);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logoImage:hover {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+@media screen and (max-width: 600px) {
+  .featuredCardContent {
+    padding: 1rem;
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+  .title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
-  
-  @keyframes slideUpFade {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+
+  .logoImage {
+    height: 50px;
   }
-  
+
+  .card {
+    margin-bottom: 3rem;
+    height: auto;
+  }
+
+  .imageWrapper {
+    height: 280px;
+  }
+}
+
+@keyframes fadeInBtn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

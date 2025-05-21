@@ -1,53 +1,65 @@
 import React from 'react';
 import styles from '../Styles/Footer.module.css';
-import { Container, Typography, Link, Box, useTheme, Grid } from '@mui/material';
+import { Container, Typography, Link, Box, useTheme } from '@mui/material';
 import logo from "../Assets/Logo.png";
-import { NavLink } from "react-router-dom"; // fixed import
+import { NavLink } from "react-router";
 
 const Footer = () => {
   const theme = useTheme();
 
   return (
     <footer className={styles.footer}>
-      <Container maxWidth={false} sx={{ width: '100%' }}>
-        <Grid
-          container
-          spacing={3}
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          className={styles.footerTop}
+      <Box sx={{ width: '100%', py: 4 }}>
+        <Container
+          maxWidth={false}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            textAlign: { xs: 'center', md: 'left' },
+          }}
         >
-          {/* Logo */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }}>
-            <Box component={NavLink} to="/" className={styles.logo}>
-              <img src={logo} alt="BOOKFINDS" className={styles.logoImage} />
-            </Box>
-          </Grid>
+          {/* Left: Logo */}
+          <Box
+            component={NavLink}
+            to="/"
+            className={styles.logo}
+            sx={{
+              mb: { xs: 2, md: 0 },
+              display: 'flex',
+              justifyContent: { xs: 'center', md: 'flex-start' },
+            }}
+          >
+            <img src={logo} alt="BOOKFINDS" className={styles.logoImage} />
+          </Box>
 
-          {/* Nav Links */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box
-              display="flex"
-              flexDirection={{ xs: 'column', md: 'row' }}
-              alignItems="center"
-              justifyContent="center"
-              gap={3}
-              className={styles.footerNavLinks}
-            >
-              <Link href="/" className={styles.navLink} underline="hover">Home</Link>
-              <Link href="/about" className={styles.navLink} underline="hover">About Us</Link>
-              <Link href="/catalogue" className={styles.navLink} underline="hover">Books</Link>
-              <Link href="/subscription" className={styles.navLink} underline="hover">Subscription</Link>
-            </Box>
-          </Grid>
+          {/* Center: Nav Links */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 3,
+              flexGrow: 1,
+            }}
+            className={styles.footerNavLinks}
+          >
+            <Link href="/" className={styles.navLink} underline="hover">Home</Link>
+            <Link href="/about" className={styles.navLink} underline="hover">About Us</Link>
+            <Link href="/catalogue" className={styles.navLink} underline="hover">Books</Link>
+            <Link href="/subscription" className={styles.navLink} underline="hover">Subscription</Link>
+          </Box>
 
-          {/* Optional Empty Column for symmetry */}
-          <Grid item xs={false} md={4} />
-        </Grid>
-      </Container>
+          {/* Right: Empty space for symmetry (if needed) */}
+          <Box sx={{ width: { xs: 0, md: '160px' } }} />
+        </Container>
+      </Box>
 
-      <Box className={styles.footerBottom}>
+      {/* Footer Bottom */}
+      <Box className={styles.footerBottom} sx={{ py: 2 }}>
         <Container maxWidth={false} sx={{ width: '100%' }}>
           <Box
             display="flex"
@@ -57,9 +69,6 @@ const Footer = () => {
             textAlign="center"
           >
             <Typography variant="body2">© 2025 Cavanssly. All rights reserved.</Typography>
-            <Box className={styles.socialLinks} mt={1}>
-              <Link href="#" aria-label="Facebook"><i className="icon icon-facebook" /></Link>
-            </Box>
           </Box>
         </Container>
       </Box>

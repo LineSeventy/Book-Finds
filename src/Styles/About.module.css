@@ -1,93 +1,119 @@
 .container {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+
 }
 
-.paper {
-  padding: 32px;
-  background-color: #fafafa;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* Shared Section Layout */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 60px;
+
 }
 
-.title {
+/* Full-width About Section */
+.aboutFull {
+  padding-top: 32px;
+  width: 100%;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+  padding-inline: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+}
+
+
+/* Typography */
+.title,
+.subTitle,
+.contactTitle,
+.formTitle,
+.teamTitle {
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
-.content {
-  font-size: 1rem;
+
+.paragraph {
+  padding-top: 2rem;
+  padding-bottom: 24px;
   line-height: 1.8;
   color: #333;
+  max-width: 60ch; /* Compress paragraph width to increase height */
+  text-align: justify;
 }
-
+/* Team List */
 .teamList {
-  margin-top: 12px;
-  margin-left: 20px;
-  list-style-type: disc;
+  list-style: disc;
   padding-left: 20px;
   color: #444;
 }
 
 .teamList li {
-  margin-bottom: 10px;
-}
-.contactSection {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
+  margin-bottom: 12px;
 }
 
-.contactTitle {
-  color: #2c3e50;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
+/* Contact List */
 .contactList {
   list-style: none;
   padding-left: 0;
-  margin-bottom: 32px;
   font-size: 1.1rem;
-  color: #34495e; /* Dark slate color for text */
+  color: #34495e;
 }
+
 .contactList li {
   margin-bottom: 12px;
 }
+
 .contactList li strong {
-  color: #2c3e50; /* Slightly darker for labels */
-  width: 90px; /* fixed width for label alignment */
+  width: 90px;
   display: inline-block;
+  color: #2c3e50;
 }
 
 .contactList li a {
-  color: #1a73e8; /* Soft blue */
+  color: #1a73e8;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-.contactList li a:hover,
-.contactList li a:focus {
-  color: #155ab6; /* Darker blue on hover/focus */
+.contactList li a:hover {
+  color: #155ab6;
   text-decoration: underline;
 }
 
+/* Cards */
+.card {
+  flex: 1;
+  min-width: 280px;
+  padding: 24px 32px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+}
+
+/* Team and Contact Specific Cards */
+.teamRight {
+  composes: card;
+}
+
+.contactCard {
+  composes: card;
+}
+
+/* Form */
 .form {
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.formTitle {
-  margin-top: 32px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.input {
-  background-color: #fff;
+  margin-top: 16px;
 }
 
 .button {
@@ -101,4 +127,90 @@
 
 .button:hover {
   background-color: #1a242f;
+}
+
+/* Grid-based layout for Section 1 */
+.gridSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  margin-bottom: 60px;
+  align-items: start;
+
+ background-color: #FFBFBF;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.rightStack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.rightCard {
+  padding: 32px; /* Add padding inside the card */
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth fade/slide animation */
+[data-aos] {
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-aos].aos-animate {
+  opacity: 1;
+}
+
+/* Hover card lift */
+.card:hover, .teamRight:hover, .contactCard:hover, .rightCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+/* Smooth transition for links */
+.contactList li a {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Form Input Focus */
+.form input:focus, .form textarea:focus {
+  border-color: #1a73e8 !important;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title, .paragraph, .teamTitle, .contactTitle, .formTitle {
+  animation: fadeInUp 1s ease forwards;
+}
+
+.button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-transform: none;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: #1a242f;
+  transform: scale(1.05);
 }

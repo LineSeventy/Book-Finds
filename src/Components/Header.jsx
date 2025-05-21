@@ -53,7 +53,7 @@ const Header = () => {
             </Box>
           </Box>
 
-          {/* Desktop Navigation */}
+
           {!isMobile && (
             <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
               {navItems.map((item) => (
@@ -90,7 +90,7 @@ const Header = () => {
             </Box>
           )}
 
-          {/* Mobile Hamburger Menu */}
+
           {isMobile && (
             <>
 <IconButton onClick={toggleDrawer(true)} className={styles.hoverIconButton}>
