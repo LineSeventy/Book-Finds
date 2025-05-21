@@ -4,7 +4,23 @@ import styles from '../Styles/Subscribe.module.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 const Subscribe = ({ book }) => {
-  
+  const handleSubscribe = async () => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUser.id, amount: 199 }),
+    });
+
+    const data = await res.json();
+    console.log("Subscription created", data);
+
+    // Redirect to PayMongo checkout (if using payment_method or webhook next)
+  } catch (err) {
+    console.error('Error subscribing:', err);
+  }
+};
+
 useEffect(() => {
   AOS.init({
     duration: 1000, 

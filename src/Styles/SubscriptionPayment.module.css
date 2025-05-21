@@ -1,16 +1,65 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+  padding: 1rem;
+}
+
 .container {
-    margin: 2rem auto;
-    max-width: 400px;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .status {
-    margin-top: 1rem;
+  width: 100%;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #444;
+  text-align: center;
+}
+
+.planBox {
+  margin-bottom: 1.5rem;
+}
+
+.planBox ul {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0 0;
+}
+
+.planBox li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.subscribeBtn {
+  transition: all 0.3s ease;
+}
+
+.subscribeBtn:hover {
+  background-color: #2e7d32 !important;
+  transform: scale(1.02);
+}
+
+.toggle:hover {
+  background-color: #e0f2f1 !important;
+  cursor: pointer;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .planBox li {
     font-size: 0.9rem;
-    color: #444;
-    text-align: center;
   }
-  
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .subscribeBtn {
+    font-size: 0.9rem;
+  }
+}

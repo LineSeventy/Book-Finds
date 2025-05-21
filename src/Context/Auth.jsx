@@ -54,20 +54,26 @@ export const AuthProvider = ({ children }) => {
     };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+  if (firebaseUser) {
+    await firebaseUser.reload(); // Ensure latest status
+    if (firebaseUser.emailVerified) {
       setUser(firebaseUser);
-  
-      if (firebaseUser) {
-        const fetched = await fetchWishlist(firebaseUser.uid);
-        setWishlist(fetched);
-      } else {
-        const local = localStorage.getItem('wishlist');
-        setWishlist(local ? JSON.parse(local) : []);
-      }
-  
-      setLoading(false); // Move this here
-    });
-  
+      const fetched = await fetchWishlist(firebaseUser.uid);
+      setWishlist(fetched);
+    } else {
+      setUser(null); 
+      setError('Please verify your email before continuing.');
+    }
+  } else {
+    const local = localStorage.getItem('wishlist');
+    setWishlist(local ? JSON.parse(local) : []);
+    setUser(null);
+  }
+
+  setLoading(false);
+});
+
     return unsubscribe;
   }, []);
   

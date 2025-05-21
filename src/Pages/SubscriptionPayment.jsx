@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { db } from '../firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+// import { supabase } from '../supabaseClient'; 
 import styles from '../Styles/SubscriptionPayment.module.css';
+import AOS from 'aos';
 
 import {
   Box,
@@ -13,6 +13,9 @@ import {
   Typography,
   CircularProgress,
   Paper,
+  Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 
 function SubscriptionPayment() {
@@ -20,9 +23,15 @@ function SubscriptionPayment() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   const prices = {
-    monthly: 199,
-    yearly: 1999,
+    monthly: 100,
   };
 
   const handlePlanChange = (event, newPlan) => {
@@ -36,28 +45,30 @@ function SubscriptionPayment() {
     try {
       const auth = getAuth();
       const user = auth.currentUser;
-
       const amount = prices[plan];
 
-      // Call backend to create payment intent
-      const response = await axios.post('{import.meta.env.VITE_API_URL}/api/create-payment', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/create-payment`, {
         amount,
       });
 
       const paymentIntent = response.data.data;
 
-      // Save to Firestore
-      await addDoc(collection(db, 'subscriptions'), {
-        uid: user?.uid || null,
-        email: user?.email || null,
-        plan,
-        amount,
-        paymentIntentId: paymentIntent.id,
-        status: 'pending',
-        createdAt: Timestamp.now(),
-      });
+      // Supabase insertion temporarily commented out:
+      /*
+      const { error } = await supabase.from('subscriptions').insert([
+        {
+          user_id: user?.uid || null,
+          email: user?.email || null,
+          plan,
+          amount,
+          paymongo_subscription_id: paymentIntent.id,
+          status: 'pending',
+        },
+      ]);
+      if (error) throw error;
+      */
 
-      setStatus(`Subscribed to ${plan} plan. Payment pending...`);
+      setStatus(`Subscribed to ₱${amount} ${plan} plan. Payment pending...`);
     } catch (error) {
       console.error(error);
       setStatus('Error processing subscription.');
@@ -67,35 +78,68 @@ function SubscriptionPayment() {
   };
 
   return (
-    <Paper className={styles.container} elevation={3}>
-      <Typography variant="h5" gutterBottom align="center">
-        Choose Your Plan
-      </Typography>
-
-      <ToggleButtonGroup
-        value={plan}
-        exclusive
-        onChange={handlePlanChange}
-        fullWidth
-        color="primary"
-        sx={{ marginBottom: 2 }}
+    <Box className={styles.page}>
+      <Paper
+        className={styles.container}
+        elevation={4}
+        data-aos="fade-up"
+        sx={{
+          width: '100%',
+          maxWidth: 600,
+          padding: isMobile ? '1.5rem' : '2.5rem',
+        }}
       >
-        <ToggleButton value="monthly">₱???? / mo</ToggleButton>
-        <ToggleButton value="yearly">₱???? / yr</ToggleButton>
-      </ToggleButtonGroup>
+        <Typography variant={isMobile ? 'h5' : 'h4'} align="center" gutterBottom>
+          Subscription Plans
+        </Typography>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubscribe}
-        fullWidth
-        disabled={loading}
-      >
-        {loading ? <CircularProgress size={24} color="inherit" /> : 'Subscribe Now'}
-      </Button>
+        <Box className={styles.planBox}>
+          <Typography variant="h6">Freemium (Free)</Typography>
+          <ul>
+            <li>Compare book prices across multiple e-commerce sites</li>
+            <li>10 searches per day</li>
+          </ul>
+        </Box>
 
-      {status && <Typography className={styles.status}>{status}</Typography>}
-    </Paper>
+        <Divider sx={{ my: 2 }} />
+
+        <Box className={styles.planBox}>
+          <Typography variant="h6">Premium - ₱100 / month</Typography>
+          <ul>
+            <li>Unlimited book price searches</li>
+            <li>Price alerts for books of interest</li>
+            <li>Top deals of the week dashboard</li>
+          </ul>
+
+          <ToggleButtonGroup
+            value={plan}
+            exclusive
+            onChange={handlePlanChange}
+            fullWidth
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            <ToggleButton value="monthly" className={styles.toggle}>
+              ₱100 / mo
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubscribe}
+            fullWidth
+            disabled={loading}
+            className={styles.subscribeBtn}
+            sx={{ mt: 2 }}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Subscribe Now'}
+          </Button>
+
+          {status && <Typography className={styles.status}>{status}</Typography>}
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 

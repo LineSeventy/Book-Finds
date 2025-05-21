@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
 import Home from "../Pages/Home";
 import Error from "../Pages/Error";
-import Create from "../Pages/CreateAccount"
+import Create from "../Pages/LoginPage"
 import App from "../App";
 import About from "../Pages/About";
 import Catalogue from "../Pages/Catalogue";
 import BookDetail from "../Pages/BookDetail"; 
-import SignUp from "../Pages/Signup"
+import SignUp from "../Pages/CreateAccount"
 import AccountInfo from "../Pages/AccountInfo";
 import SubscriptionPayment from "../Pages/SubscriptionPayment";
 

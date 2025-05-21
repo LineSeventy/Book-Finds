@@ -1,13 +1,15 @@
 .featuredCard {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 32px;
-    border: 2px solid #f0f0f0; /* Light border around the card */
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft box shadow */
-    border-radius: 16px; /* rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for shadow and transform */
-  }
+  width: 100%;
+  max-width: none; /* Remove restriction */
+  padding: 32px;
+  border: 2px solid #f0f0f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.5s ease forwards;
+}
+
   
   .featuredCard:hover {
     transform: translateY(-6px);
@@ -88,4 +90,8 @@
       opacity: 1;
     }
   }
-  
+  @media (max-width: 600px) {
+  .featuredCard {
+    padding: 20px;
+  }
+}

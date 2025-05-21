@@ -1,0 +1,17 @@
+/* SignUp.module.css */
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 16px;
+  }
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

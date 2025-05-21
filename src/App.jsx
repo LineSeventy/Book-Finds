@@ -3,7 +3,7 @@ import Footer from "./Components/Footer"
 import Header from "./Components/Header"
 import './Styles/App.css'
 import {Outlet} from "react-router"
-import Create from "./Pages/CreateAccount"
+import Create from "./Pages/LoginPage"
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';

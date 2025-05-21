@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router'; // Import useParams to access the URL params
+import { useParams } from 'react-router';
 import {
   Container,
   Typography,
@@ -12,72 +12,124 @@ import {
 import ImageWithFallback from '../Components/ImageFallBack'; 
 import styles from '../Styles/BookDetail.module.css'; 
 import { useAuth } from '../Context/Auth'; 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 function BookDetail() {
-  const { bookId } = useParams();  // Get the bookId from the URL
+    const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { bookId } = useParams();
   const [book, setBook] = useState(null);
   const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(true);  // State to track loading
-const { handleAddToWishlist, wishlist } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const { handleAddToWishlist, wishlist } = useAuth();
+const [showFullDesc, setShowFullDesc] = useState(false);
+  const formatDescription = (text) => {
+    return text
+      .split(/\n|\r|\r\n/)
+      .filter(paragraph => paragraph.trim() !== '')
+      .map((paragraph, idx) => (
+        <Typography
+          key={idx}
+          sx={{
+            mt: idx === 0 ? 0 : 2,
+            fontSize: { xs: '0.9rem', sm: '1rem' },
+            lineHeight: 1.5
+          }}
+          paragraph
+        >
+          {paragraph}
+        </Typography>
+      ));
+  };
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
 
-const handleAdd = () => {
-  if (!book) return;
+  const handleAdd = () => {
+    if (!book) return;
 
-  const item = {
-    id: bookId,
-    title: book.fullybooked_title,
-    price: book.fullybooked_price || book.allbooked_price || book.nationalbookstore_price || '',
-    image: book.fullybooked_image || book.allbook_image || book.nationalbookstore_image || '',
+    const item = {
+      id: bookId,
+      title: book.fullybooked_title,
+      price: book.fullybooked_price || book.allbooked_price || book.nationalbookstore_price || '',
+      image: book.fullybooked_image || book.allbook_image || book.nationalbookstore_image || '',
+    };
+
+    if (!wishlist.some(w => w.id === item.id)) {
+      handleAddToWishlist(item);
+    }
   };
 
-  const alreadyInWishlist = wishlist.some(w => w.id === item.id);
-  if (!alreadyInWishlist) {
-    handleAddToWishlist(item);
-  }
-};
+useEffect(() => {
+  const fetchBookDetails = async () => {
+    setBook(null);
+    setLoading(true);
 
-  useEffect(() => {
-    setBook(null); 
-    setLoading(true);  // Set loading to true when the fetch starts
-    console.log('Fetching book details for bookId:', bookId);
-    fetch(`${import.meta.env.VITE_API_URL}/api/matched-books?id=${bookId}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log('Fetched data:', data);
-        if (data && data.length > 0) {
-          setBook(data[0]);
-          setDescription(data[0].description || 'Description not available');
-        } else {
-          console.error('No book found with the given bookId');
-          setBook(null); // Set book to null if no data found
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/matched-books?id=${bookId}`);
+      const data = await res.json();
+
+      if (data && data.length > 0) {
+        const bookData = data[0];
+        setBook(bookData);
+
+        // Fallback title logic
+        const title =
+          bookData.fullybooked_title ||
+          bookData.allbook_title ||
+          bookData.nationalbookstore_title ||
+          'Unknown Title';
+
+        // Fetch Google Books description
+        try {
+          const gRes = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}&key=AIzaSyAWkn0w6HyiO7uphbXhXkq1wK3EWc7Ioc8`
+          );
+          const gData = await gRes.json();
+          const desc = gData.items?.[0]?.volumeInfo?.description || 'Description not available';
+          setDescription(desc);
+        } catch (gErr) {
+          console.error('Error fetching description from Google Books:', gErr);
+          setDescription('Description not available');
         }
-      })
-      .catch(err => {
-        console.error('Error fetching book details:', err);
-        setBook(null);  // In case of an error, set book to null
-      })
-      .finally(() => {
-        setLoading(false); // Set loading to false after the fetch finishes
-      });
-  }, [bookId]);
+      } else {
+        setBook(null);
+        setDescription('Description not available');
+      }
+    } catch (err) {
+      console.error('Error fetching book details:', err);
+      setBook(null);
+      setDescription('Error loading description');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-if (loading) {
-  return (
-    <Box
-      sx={{
-        minHeight: 'calc(100vh - 64px)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f9f9f9',
-      }}
-    >
-      <CircularProgress size={60} />
-    </Box>
-  );
-}
+  fetchBookDetails();
+}, [bookId]);
+
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: 'calc(100vh - 64px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f9f9f9',
+        }}
+      >
+        <CircularProgress size={60} />
+      </Box>
+    );
+  }
 
   if (!book) {
-    return <Typography>No book found</Typography>; // Show error if no book data is available
+    return <Typography sx={{ p: 4 }}>No book found</Typography>;
   }
 
   const parsePrice = (price) => {
@@ -86,99 +138,155 @@ if (loading) {
     return isNaN(parsed) ? null : parsed;
   };
 
-  return (
- <Container
-  maxWidth={false}
-  disableGutters
-  sx={{
-    minHeight: '100vh',
-    padding: 4,
-    backgroundColor: '#f9f9f9',
-  }}
->
-      <Box sx={{ mb: 4 }}>
-        <Card className={styles.featuredCard}>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, boxShadow: "none" }}>
-            <CardContent
-              className={styles.featuredCardContent}
-              sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-            >
-            <Typography variant="h6" className={styles.bookSource}>
-              {book.fullybooked_title || 'Title not available'}
-            </Typography>
+return (
+  <Box
+    sx={{
+      minHeight: '100vh',
+      p: { xs: 2, md: 4 },
+      backgroundColor: '#f9f9f9',
+    }}
+  >
+    <Box
+      data-aos="fade-up"
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: 4,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+      }}
+    >
+      {/* Left Image */}
+      <Box
+        sx={{
+          flex: '1 1 40%',
+          maxWidth: { xs: '100%', md: '40%' },
+          position: 'relative',
+        }}
+      >
+        <ImageWithFallback
+          images={[
+            book.fullybooked_image || '',
+            book.allbook_image || '',
+            book.nationalbookstore_image || '',
+          ]}
+          alt={book.fullybooked_title || 'Book image'}
+          height={500}
+          width="100%"
+          style={{ objectFit: 'contain', width: '100%' }}
+        />
 
-              <Typography sx={{ mt: 2 }}>
-                {description}
-              </Typography>
-            </CardContent>
-
-            <Box
-              className={styles.imageWrapper}
-            >
-              <ImageWithFallback
-                images={[
-                  book.fullybooked_image || '',
-                  book.allbook_image || '',
-                  book.nationalbookstore_image || '',
-                ]}
-                alt={book.fullybooked_title || 'Book image'}
-                height={400}
-                width="100%"
-                style={{ objectFit: 'contain', maxWidth: '100%' }}
-              />
-
-              <Box className={styles.overlay}>
-<Button
-  className={styles.wishlistBtn}
-  onClick={handleAdd}
-  disabled={wishlist.some(w => w.id === bookId)}
->
-  {wishlist.some(w => w.id === bookId) ? 'In Wishlist' : 'Add to Wishlist'}
-</Button>
-              </Box>
-            </Box>
-          </Box>
-        </Card>
+        <Box className={styles.overlay}>
+          <Button
+            className={styles.wishlistBtn}
+            onClick={handleAdd}
+            disabled={wishlist.some(w => w.id === bookId)}
+          >
+            {wishlist.some(w => w.id === bookId) ? 'In Wishlist' : 'Add to Wishlist'}
+          </Button>
+        </Box>
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Price Comparison</Typography>
+      {/* Right Content */}
+      <Box
+        sx={{
+          flex: '1 1 60%',
+          maxWidth: { xs: '100%', md: '60%' },
+        }}
+      >
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          {book.fullybooked_title || book.allbook_title || book.nationalbookstore_title || 'Title not available'}
+        </Typography>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 2 }}>
-          {[{
+ <Box>
+    {showFullDesc
+      ? formatDescription(description)
+      : formatDescription(
+          (isMobile
+            ? description.slice(0, 200)
+            : description.slice(0, 400)) + (description.length > (isMobile ? 200 : 400) ? '...' : '')
+        )}
+
+    {description.length > (isMobile ? 200 : 400) && (
+      <Button
+        onClick={() => setShowFullDesc(prev => !prev)}
+        size="small"
+        sx={{ mt: 1 }}
+      >
+        {showFullDesc ? 'View Less' : 'View More'}
+      </Button>
+    )}
+  </Box>
+      </Box>
+    </Box>
+
+    {/* Price Comparison Section */}
+    <Box sx={{ mt: 6 }} data-aos="fade-up">
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Price Comparison
+      </Typography>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        {[
+          {
             name: 'AllBooked',
             price: parsePrice(book.allbooked_price),
-            url: book.allbooked_url
-          }, {
+            url: book.allbooked_url,
+          },
+          {
             name: 'National Bookstore',
             price: parsePrice(book.nationalbookstore_price),
-            url: book.nationalbookstore_url
-          }, {
+            url: book.nationalbookstore_url,
+          },
+          {
             name: 'FullyBooked',
             price: parsePrice(book.fullybooked_price),
-            url: book.fullybook_url
-          }].map((source, idx) => (
-            <Box key={idx} sx={{ flex: '1 1 30%', textAlign: 'center' }}>
-              <Typography variant="body1">{source.name}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {source.price !== null ? `₱${source.price.toFixed(2)}` : 'Price not available'}
-              </Typography>
-              {source.url ? (
-                <Button variant="outlined" href={source.url} target="_blank" rel="noreferrer" sx={{ mt: 1 }}>
-                  View Price
-                </Button>
-              ) : (
-                <Button variant="outlined" disabled sx={{ mt: 1 }}>
-                  Not Available
-                </Button>
-              )}
-            </Box>
-          ))}
-        </Box>
-
+            url: book.fullybook_url,
+          },
+        ].map((source, idx) => (
+          <Box
+            key={idx}
+            sx={{
+              flex: { xs: '1 1 100%', sm: '1 1 30%' },
+              textAlign: 'center',
+              backgroundColor: '#fff',
+              p: 2,
+              borderRadius: 2,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+              },
+            }}
+          >
+            <Typography variant="body1">{source.name}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {source.price !== null ? `₱${source.price.toFixed(2)}` : 'Price not available'}
+            </Typography>
+            <Button
+              variant="outlined"
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              sx={{ mt: 1 }}
+              disabled={!source.url}
+            >
+              {source.url ? 'View Price' : 'Not Available'}
+            </Button>
+          </Box>
+        ))}
       </Box>
-    </Container>
-  );
-}
+    </Box>
+  </Box>
+)};
+
 
 export default BookDetail;
