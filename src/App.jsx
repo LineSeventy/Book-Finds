@@ -13,9 +13,17 @@ import '@fontsource/inter/700.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from './Context/Auth';
 import { Container } from "@mui/material"
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useEffect } from "react"
 
 function App() {
+  useEffect(() => {
+  AOS.init({
+    duration: 1000,
+    once: true,
+  });
+}, []);
   return (
     <AuthProvider>
 

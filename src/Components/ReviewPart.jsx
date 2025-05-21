@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Rating, Grid } from '@mui/material';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import reviews from '../Json/reviews.json';
+import styles from '../Styles/ReviewPart.module.css'; 
 
 const ReviewPart = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   const getRandomReviews = (arr, count) => {
     const shuffled = arr
       .map(value => ({ value, sort: Math.random() }))
@@ -61,6 +71,8 @@ const ReviewPart = () => {
               sx={{ display: 'flex', justifyContent: 'center' }}
             >
               <Card
+                data-aos="fade-up"
+                className={styles.card}
                 sx={{
                   borderRadius: 3,
                   p: 2,
