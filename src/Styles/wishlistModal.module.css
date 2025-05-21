@@ -1,0 +1,56 @@
+.dialogTitle {
+  font-weight: 600;
+  text-align: center;
+}
+
+.dialogContent {
+  padding: 16px;
+}
+
+.listItem {
+  padding: 12px 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: box-shadow 0.3s ease;
+}
+
+.listItem:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  word-break: break-word;
+  font-weight: 600;
+  color: #333;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.viewButton {
+  transition: all 0.3s ease;
+}
+
+.viewButton:hover {
+  background-color: #e0f7fa;
+}
+
+.deleteButton {
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #ffebee;
+}
+
+.emptyText {
+  text-align: center;
+  padding: 16px 0;
+  font-style: italic;
+  color: #777;
+}

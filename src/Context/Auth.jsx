@@ -5,7 +5,9 @@ import {
   getDocs,
   collection,
   doc,
-  setDoc
+  setDoc,
+    deleteDoc, 
+  writeBatch 
 } from 'firebase/firestore';
 
 const AuthContext = createContext();
@@ -23,6 +25,33 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+    const handleDeleteFromWishlist = async (itemId) => {
+      const updatedWishlist = wishlist.filter(item => item.id !== itemId);
+      setWishlist(updatedWishlist);
+
+      if (user) {
+        const itemRef = doc(db, 'users', user.uid, 'wishlist', itemId);
+        await deleteDoc(itemRef);
+      } else {
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+      }
+    };
+
+    const handleClearWishlist = async () => {
+      setWishlist([]);
+
+      if (user) {
+        const wishlistRef = collection(doc(db, 'users', user.uid), 'wishlist');
+        const snapshot = await getDocs(wishlistRef);
+        const batch = writeBatch(db);
+        snapshot.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        await batch.commit();
+      } else {
+        localStorage.removeItem('wishlist');
+      }
+    };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -49,6 +78,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleAddToWishlist = async (item) => {
+     if (wishlist.some(w => w.id === item.id)) return; 
+
     const newWishlist = [...wishlist, item];
     setWishlist(newWishlist);
 
@@ -60,7 +91,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, wishlist, handleAddToWishlist, loading }}>
+<AuthContext.Provider
+  value={{
+    user,
+    wishlist,
+    handleAddToWishlist,
+    handleDeleteFromWishlist,
+    handleClearWishlist,
+    loading
+  }}
+>
+
       {!loading && children}
     </AuthContext.Provider>
   );

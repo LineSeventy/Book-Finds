@@ -210,74 +210,79 @@ if (loading) {
         </Typography>
 
         <Box sx={{ overflowX: 'hidden', width: '100%' }}>
-          <Slider {...sliderSettings}>
-            {remainingBooks.map((book, index) => (
-              <Box
-                key={crypto.randomUUID()}
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
-                sx={{ px: 1, width: '100%', boxSizing: 'border-box' }}
+         <Slider {...sliderSettings}>
+  {remainingBooks.map((book, index) => (
+    <Box
+      key={crypto.randomUUID()}
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+      sx={{ px: 1, width: '100%', boxSizing: 'border-box' }}
+    >
+      <Link to={`/catalogue/${encodeURIComponent(book.id)}`} style={{ textDecoration: 'none' }}>
+        <Card
+          className={styles.card}
+          sx={{
+            height: 460,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            px: 1,
+            border: '2px solid #ccc',
+            borderRadius: 3,
+            backgroundColor: '#fff',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            marginBottom: "5rem",
+            marginTop: "5rem",
+            '&:hover': {
+              transform: 'translateY(-6px)',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+              borderColor: '#999',
+            },
+          }}
+        >
+          <CardContent className={styles.cardContent}>
+            <Typography variant="h6" className={styles.title}>
+              {getFallbackTitle(book)}
+            </Typography>
+          </CardContent>
+          <Box className={styles.imageWrapper}>
+            <ImageWithFallback
+              images={[
+                book.fullybooked_image,
+                book.allbook_image,
+                book.nationalbookstore_image
+              ]}
+              alt={book.title}
+              height={300}
+              width={250}
+              style={{
+                objectFit: 'contain',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                display: 'block',
+                margin: '0 auto',
+              }}
+            />
+            <Box className={styles.overlay}>
+              <Button
+                className={styles.wishlistBtn}
+                variant="contained"
+                size="small"
+                onClick={(e) => {
+                  e.preventDefault(); 
+                  handleAddToWishlist(book);
+                }}
               >
-                <Card
-                  className={styles.card}
-                  sx={{
-                    height: 460,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    px: 1,
-                    border: '2px solid #ccc',
-                    borderRadius: 3,
-                    backgroundColor: '#fff',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    marginBottom: "5rem",
-                    marginTop: "5rem",
-                    '&:hover': {
-                      transform: 'translateY(-6px)',
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-                      borderColor: '#999',
-                    },
-                  }}
-                >
-                  <CardContent className={styles.cardContent}>
-                    <Typography variant="h6" className={styles.title}>
-                      {getFallbackTitle(book)}
-                    </Typography>
-                  </CardContent>
-                  <Box className={styles.imageWrapper}>
-                    <ImageWithFallback
-                      images={[
-                        book.fullybooked_image,
-                        book.allbook_image,
-                        book.nationalbookstore_image
-                      ]}
-                      alt={book.title}
-                      height={300}
-                      width={250}
-                      style={{
-                        objectFit: 'contain',
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        display: 'block',
-                        margin: '0 auto',
-                      }}
-                    />
-                    <Box className={styles.overlay}>
-                      <Button
-                        className={styles.wishlistBtn}
-                        variant="contained"
-                        size="small"
-                        onClick={() => handleAddToWishlist(book)}
-                      >
-                        Add to Wishlist
-                      </Button>
-                    </Box>
-                  </Box>
-                </Card>
-              </Box>
-            ))}
-          </Slider>
+                Add to Wishlist
+              </Button>
+            </Box>
+          </Box>
+        </Card>
+      </Link>
+    </Box>
+  ))}
+</Slider>
         </Box>
 
         <ReviewPart />

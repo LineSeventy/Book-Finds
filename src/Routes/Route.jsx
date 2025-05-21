@@ -10,7 +10,6 @@ import SignUp from "../Pages/Signup"
 import AccountInfo from "../Pages/AccountInfo";
 import SubscriptionPayment from "../Pages/SubscriptionPayment";
 
-
 export const router = createBrowserRouter([
   {
     path: "/",

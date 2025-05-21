@@ -6,16 +6,34 @@ import {
   Box,
   Button,
   Card,
-  CardContent
+  CardContent,
+  CircularProgress
 } from '@mui/material';
 import ImageWithFallback from '../Components/ImageFallBack'; 
 import styles from '../Styles/BookDetail.module.css'; 
-
+import { useAuth } from '../Context/Auth'; 
 function BookDetail() {
   const { bookId } = useParams();  // Get the bookId from the URL
   const [book, setBook] = useState(null);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);  // State to track loading
+const { handleAddToWishlist, wishlist } = useAuth();
+
+const handleAdd = () => {
+  if (!book) return;
+
+  const item = {
+    id: bookId,
+    title: book.fullybooked_title,
+    price: book.fullybooked_price || book.allbooked_price || book.nationalbookstore_price || '',
+    image: book.fullybooked_image || book.allbook_image || book.nationalbookstore_image || '',
+  };
+
+  const alreadyInWishlist = wishlist.some(w => w.id === item.id);
+  if (!alreadyInWishlist) {
+    handleAddToWishlist(item);
+  }
+};
 
   useEffect(() => {
     setBook(null); 
@@ -42,9 +60,21 @@ function BookDetail() {
       });
   }, [bookId]);
 
-  if (loading) {
-    return <Typography>Loading...</Typography>; // Show "Loading..." while fetching data
-  }
+if (loading) {
+  return (
+    <Box
+      sx={{
+        minHeight: 'calc(100vh - 64px)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f9f9f9',
+      }}
+    >
+      <CircularProgress size={60} />
+    </Box>
+  );
+}
 
   if (!book) {
     return <Typography>No book found</Typography>; // Show error if no book data is available
@@ -57,7 +87,15 @@ function BookDetail() {
   };
 
   return (
-    <Container sx={{ paddingTop: 4 }}>
+ <Container
+  maxWidth={false}
+  disableGutters
+  sx={{
+    minHeight: '100vh',
+    padding: 4,
+    backgroundColor: '#f9f9f9',
+  }}
+>
       <Box sx={{ mb: 4 }}>
         <Card className={styles.featuredCard}>
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, boxShadow: "none" }}>
@@ -67,9 +105,6 @@ function BookDetail() {
             >
             <Typography variant="h6" className={styles.bookSource}>
               {book.fullybooked_title || 'Title not available'}
-            </Typography>
-            <Typography variant="subtitle2" color="text.secondary">
-              {book.author ? `by ${book.author}` : 'Author unknown'}
             </Typography>
 
               <Typography sx={{ mt: 2 }}>
@@ -93,9 +128,13 @@ function BookDetail() {
               />
 
               <Box className={styles.overlay}>
-                <Button className={styles.wishlistBtn}>
-                  Add to Wishlist
-                </Button>
+<Button
+  className={styles.wishlistBtn}
+  onClick={handleAdd}
+  disabled={wishlist.some(w => w.id === bookId)}
+>
+  {wishlist.some(w => w.id === bookId) ? 'In Wishlist' : 'Add to Wishlist'}
+</Button>
               </Box>
             </Box>
           </Box>

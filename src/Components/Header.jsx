@@ -92,89 +92,90 @@ const Header = () => {
                 <ShoppingCart />
                 <Typography variant="body2" ml={1}>Wishlist ({wishlist.length})</Typography>
               </IconButton>
-
+              <IconButton
+                className={styles.hoverIconButton}
+                onClick={() => setSearchOpen((prev) => !prev)}
+              >
+                <Search />
+              </IconButton>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <IconButton className={styles.hoverIconButton} onClick={() => setSearchOpen(true)}>
-                  <Search />
-                </IconButton>
+                {searchOpen && (
+                  <ClickAwayListener onClickAway={() => setSearchOpen(false)}>
+                    <Box
+                      sx={{
+                        width: 300,
+                        height: 250,
+                        backgroundColor: '#fff',
+                        borderRadius: '4px',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                        zIndex: 2,
+                        position: 'absolute',
+                        right: 0,
+                        top: '100%',
+                        mt: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {/* Search Input */}
+                      <Box sx={{ p: 1, borderBottom: '1px solid #eee' }}>
+                        <input
+                          type="text"
+                          placeholder="Search books..."
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          className={styles.input}
+                          style={{
+                            width: '100%',
+                            border: 'none',
+                            outline: 'none',
+                            fontSize: '1rem'
+                          }}
+                        />
+                      </Box>
 
-               {searchOpen && (
-  <ClickAwayListener onClickAway={() => setSearchOpen(false)}>
-    <Box
-      sx={{
-        width: 300,
-        height: 250,
-        backgroundColor: '#fff',
-        borderRadius: '4px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-        zIndex: 2,
-        position: 'absolute',
-        right: 0,
-        top: '100%',
-        mt: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Search Input */}
-      <Box sx={{ p: 1, borderBottom: '1px solid #eee' }}>
-        <input
-          type="text"
-          placeholder="Search books..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className={styles.input}
-          style={{
-            width: '100%',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1rem'
-          }}
-        />
-      </Box>
-
-      {/* Suggestions List */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflowY: 'auto',
-        }}
-      >
-        {suggestions.length > 0 ? (
-          suggestions.map(book => (
-            <Box
-              key={book.id}
-              sx={{
-                px: 2,
-                py: 1,
-                cursor: 'pointer',
-                '&:hover': { backgroundColor: '#f0f0f0' }
-              }}
-              onClick={() => {
-                setSearchOpen(false);
-                navigate(`/catalogue/${book.id}`);
-              }}
-            >
-              {book.fullybooked_title}
-            </Box>
-          ))
-        ) : (
-          <Box sx={{ px: 2, py: 1, color: '#999' }}>
-            No suggestions found
-          </Box>
-        )}
-      </Box>
-    </Box>
-  </ClickAwayListener>
-)}
+                      {/* Suggestions List */}
+                      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                        {suggestions.length > 0 ? (
+                          suggestions.map(book => (
+                            <Box
+                              key={book.id}
+                              sx={{
+                                px: 2,
+                                py: 1,
+                                cursor: 'pointer',
+                                '&:hover': { backgroundColor: '#f0f0f0' }
+                              }}
+                              onClick={() => {
+                                setSearchOpen(false);
+                                navigate(`/catalogue/${book.id}`);
+                              }}
+                            >
+                              {book.fullybooked_title}
+                            </Box>
+                          ))
+                        ) : (
+                          <Box sx={{ px: 2, py: 1, color: '#999' }}>
+                            No suggestions found
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
+                  </ClickAwayListener>
+                )}
               </Box>
             </Box>
           ) : (
             <>
+            <Box sx={{ display: "flex", gap: 0 }}>
+              <IconButton onClick={() => setSearchOpen(true)} className={styles.hoverIconButton}>
+                <Search />
+              </IconButton>
               <IconButton onClick={toggleDrawer(true)} className={styles.hoverIconButton}>
                 <Menu />
               </IconButton>
+            </Box>
 
               <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
                 <Box
@@ -219,20 +220,71 @@ const Header = () => {
                   >
                     Wishlist ({wishlist.length})
                   </Typography>
-
-                  <Typography
-                    onClick={() => setSearchOpen(true)}
-                    className={styles.navLink}
-                    sx={{ padding: "12px 8px", fontSize: "1rem", cursor: "pointer" }}
-                  >
-                    Search
-                  </Typography>
                 </Box>
               </Drawer>
             </>
           )}
         </Toolbar>
       </Container>
+
+
+      {isMobile && searchOpen && (
+        <ClickAwayListener onClickAway={() => setSearchOpen(false)}>
+          <Box
+            sx={{
+              px: 2,
+              py: 1,
+              backgroundColor: '#fff',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              position: 'absolute',
+              top: '64px',
+              left: 0,
+              right: 0,
+              zIndex: 10,
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Search books..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className={styles.input}
+              style={{
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '8px 12px',
+                fontSize: '1rem',
+              }}
+            />
+            <Box sx={{ mt: 1, maxHeight: 200, overflowY: 'auto' }}>
+              {suggestions.length > 0 ? (
+                suggestions.map(book => (
+                  <Box
+                    key={book.id}
+                    sx={{
+                      px: 1,
+                      py: 1,
+                      cursor: 'pointer',
+                      '&:hover': { backgroundColor: '#f0f0f0' }
+                    }}
+                    onClick={() => {
+                      setSearchOpen(false);
+                      navigate(`/catalogue/${book.id}`);
+                    }}
+                  >
+                    {book.fullybooked_title}
+                  </Box>
+                ))
+              ) : (
+                <Box sx={{ px: 1, py: 1, color: '#999' }}>
+                  No suggestions found
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </ClickAwayListener>
+      )}
 
       <WishlistModal open={wishlistOpen} onClose={handleCloseWishlist} items={wishlist} />
     </AppBar>

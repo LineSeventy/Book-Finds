@@ -13,15 +13,26 @@ const ReviewPart = () => {
     });
   }, []);
 
-  const getRandomReviews = (arr, count) => {
-    const shuffled = arr
-      .map(value => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-    return shuffled.slice(0, count);
-  };
 
-  const displayedReviews = getRandomReviews(reviews, 4);
+
+const displayedReviews = [
+  {
+    review: "Ang bilis ng delivery at maayos ang packaging. Salamat po!",
+    rating: 5,
+  },
+  {
+    review: "Sobrang sulit! Nakahanap ako ng pinakamurang presyo ng libro. Highly recommended!",
+    rating: 5,
+  },
+  {
+    review: "Madaling gamitin ang site at kumpleto sa detalye. Bibili ulit ako dito.",
+    rating: 5,
+  },
+  {
+    review: "Maayos ang serbisyo at mabilis mag-update ng presyo. Salamat sa tulong!",
+    rating: 5,
+  },
+];
 
   return (
     <Box
