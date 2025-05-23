@@ -286,7 +286,7 @@ if (loading) {
         </Box>
 
         <ReviewPart />
-        <Subscribe book={firstBook} />
+
       </Box>
     </Container>
   );
