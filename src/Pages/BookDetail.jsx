@@ -25,21 +25,16 @@ function BookDetail() {
   const { handleAddToWishlist, wishlist } = useAuth();
   const [showFullDesc, setShowFullDesc] = useState(false);
 
+  const handleAdd = () => {
+    handleAddToWishlist(bookId, book);
+  };
+
   const formatDescription = (text) => {
     return text
       .split(/\n|\r|\r\n/)
-      .filter(paragraph => paragraph.trim() !== '')
-      .map((paragraph, idx) => (
-        <Typography
-          key={idx}
-          sx={{
-            mt: idx === 0 ? 0 : 2,
-            fontSize: { xs: '0.9rem', sm: '1rem' },
-            lineHeight: 1.5
-          }}
-          paragraph
-        >
-          {paragraph}
+      .map((line, index) => (
+        <Typography key={index} variant="body1" sx={{ mb: 1 }}>
+          {line}
         </Typography>
       ));
   };
@@ -47,21 +42,6 @@ function BookDetail() {
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
   }, []);
-
-  const handleAdd = () => {
-    if (!book) return;
-
-    const item = {
-      id: bookId,
-      title: book.fullybooked_title,
-      price: book.fullybooked_price || book.allbooked_price || book.nationalbookstore_price || '',
-      image: book.fullybooked_image || book.allbook_image || book.nationalbookstore_image || '',
-    };
-
-    if (!wishlist.some(w => w.id === item.id)) {
-      handleAddToWishlist(item);
-    }
-  };
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -89,14 +69,16 @@ function BookDetail() {
             const gData = await gRes.json();
             const desc = gData.items?.[0]?.volumeInfo?.description || 'Description not available';
             setDescription(desc);
-          } catch {
+          } catch (gErr) {
+            console.error('Error fetching Google Books description:', gErr);
             setDescription('Description not available');
           }
         } else {
           setBook(null);
           setDescription('Description not available');
         }
-      } catch {
+      } catch (err) {
+        console.error('Error fetching book details:', err);
         setBook(null);
         setDescription('Error loading description');
       } finally {
@@ -107,40 +89,29 @@ function BookDetail() {
     fetchBookDetails();
   }, [bookId]);
 
+  const parsePrice = (price) => {
+    const parsed = parseFloat(price?.replace(/[^\d.]/g, ''));
+    return isNaN(parsed) ? null : parsed;
+  };
+
   if (loading) {
     return (
-      <Box
-        sx={{
-          minHeight: 'calc(100vh - 64px)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#f9f9f9',
-        }}
-      >
-        <CircularProgress size={60} />
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+        <CircularProgress />
       </Box>
     );
   }
 
   if (!book) {
-    return <Typography sx={{ p: 4 }}>No book found</Typography>;
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Typography variant="h6">Book not found.</Typography>
+      </Container>
+    );
   }
 
-  const parsePrice = (price) => {
-    if (!price) return null;
-    const parsed = parseFloat(price.replace(/[^\d.-]/g, ''));
-    return isNaN(parsed) ? null : parsed;
-  };
-
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        p: { xs: 2, md: 4 },
-        backgroundColor: '#f9f9f9',
-      }}
-    >
+    <Box sx={{ minHeight: '100vh', p: { xs: 2, md: 4 }, backgroundColor: '#f9f9f9' }}>
       <Box
         data-aos="fade-up"
         sx={{
@@ -151,32 +122,34 @@ function BookDetail() {
           justifyContent: 'center',
         }}
       >
-        {/* Left Image with Overlay */}
-        <Box className={styles.imageWrapper}>
-          <ImageWithFallback
-            images={[
-              book.fullybooked_image || '',
-              book.allbook_image || '',
-              book.nationalbookstore_image || '',
-            ]}
-            alt={book.fullybooked_title || 'Book image'}
-            height={500}
-            width="100%"
-            style={{ objectFit: 'contain', width: '100%' }}
-          />
+        {/* Left - Image */}
+        <Box sx={{ flex: '1 1 40%', maxWidth: { xs: '100%', md: '40%' } }}>
+          <Box className={styles.imageWrapper}>
+            <ImageWithFallback
+              images={[
+                book.fullybooked_image || '',
+                book.allbook_image || '',
+                book.nationalbookstore_image || '',
+              ]}
+              alt={book.fullybooked_title || 'Book image'}
+              height={500}
+              width="100%"
+              style={{ objectFit: 'contain', width: '100%' }}
+            />
 
-          <Box className={styles.overlay}>
-            <Button
-              className={styles.wishlistBtn}
-              onClick={handleAdd}
-              disabled={wishlist.some(w => w.id === bookId)}
-            >
-              {wishlist.some(w => w.id === bookId) ? 'In Wishlist' : 'Add to Wishlist'}
-            </Button>
+            <Box className={styles.overlay}>
+              <Button
+                className={styles.wishlistBtn}
+                onClick={handleAdd}
+                disabled={wishlist.some(w => w.id === bookId)}
+              >
+                {wishlist.some(w => w.id === bookId) ? 'In Wishlist' : 'Add to Wishlist'}
+              </Button>
+            </Box>
           </Box>
         </Box>
 
-        {/* Right Content */}
+        {/* Right - Info */}
         <Box sx={{ flex: '1 1 60%', maxWidth: { xs: '100%', md: '60%' } }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
             {book.fullybooked_title || book.allbook_title || book.nationalbookstore_title || 'Title not available'}
@@ -189,9 +162,8 @@ function BookDetail() {
                   (isMobile
                     ? description.slice(0, 200)
                     : description.slice(0, 400)) +
-                    (description.length > (isMobile ? 200 : 400) ? '...' : '')
+                  (description.length > (isMobile ? 200 : 400) ? '...' : '')
                 )}
-
             {description.length > (isMobile ? 200 : 400) && (
               <Button onClick={() => setShowFullDesc(prev => !prev)} size="small" sx={{ mt: 1 }}>
                 {showFullDesc ? 'View Less' : 'View More'}
@@ -201,7 +173,7 @@ function BookDetail() {
         </Box>
       </Box>
 
-      {/* Price Comparison */}
+      {/* Price Comparison Section */}
       <Box sx={{ mt: 6 }} data-aos="fade-up">
         <Typography variant="h6" sx={{ mb: 2 }}>
           Price Comparison
