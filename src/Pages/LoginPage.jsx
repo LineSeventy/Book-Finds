@@ -135,10 +135,7 @@ function LoginPage() {
 
         </Box>
 
-        {/* Google Login */}
-        <Typography align="center" sx={{ my: 2 }}>
-          OR
-        </Typography>
+
 <Button
   onClick={handleGoogleLogin}
   variant="outlined"
@@ -149,10 +146,7 @@ function LoginPage() {
   Sign in with Google
 </Button>
 
-        {/* Phone/SMS Login */}
-        <Typography align="center" sx={{ my: 2 }}>
-          OR
-        </Typography>
+
         <TextField
           label="Phone Number"
           variant="outlined"
