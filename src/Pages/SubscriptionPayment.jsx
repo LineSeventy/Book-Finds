@@ -104,7 +104,7 @@ function SubscriptionPayment() {
         <Divider sx={{ my: 2 }} />
 
         <Box className={styles.planBox}>
-          <Typography variant="h6">Premium - ₱100 / month</Typography>
+          <Typography variant="h6">Premium - ₱49 / month</Typography>
           <ul>
             <li>Unlimited book price searches</li>
             <li>Price alerts for books of interest</li>
